@@ -2,52 +2,51 @@ import CellPhone from '../models/CellPhone.js';
 import HistorialVentas from '../models/HistorialVentas.js' ;
 
 const agregarVenta = async (req, res) => {
+
+    const {modelo, cantidadVendida, numeroDeSerie} = req.body;
+    const producto = req.producto;
+
+    if (numeroDeSerie !== producto.numeroDeSerie) {
+        return res.status(404).json({ msg : "Numero de serie no encontrado" })
+    }
+
+    if(modelo !== producto.modeloVendido){
+        return res.status(404).json({ msg : "Modelo no encontrado" })
+    }
+
+    if(!producto){
+        return res.status(404).json({ msg : "Producto no encontrado" })
+    }
+
+    if (producto.catidadEnInventario < cantidadVendida ) {
+        return res.status(404).json({ msg : "Stock insuficiente" })
+    }
+
     try {
-        const { productoID, cantidadVendida, precioVenta, cliente } = req.body;
 
-        console.log(productoID);
-        
-        // Buscar el producto por su ID
-        const producto = await CellPhone.findById(productoId);
 
-        if (!producto) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
-        }
+        const venta = new HistorialVentas(req.body);
+        const guardarVenta = await venta.save();
+        res.json({guardarVenta})
 
-        // Verificar si hay suficiente stock
-        if (producto.catidadEnInventario < cantidadVendida) {
-            return res.status(400).json({ message: 'Stock insuficiente' });
-        }
-
-        // Crear una nueva entrada en el historial de ventas
-        const nuevaVenta = new HistorialVentas({
-            productoId: producto._id,
-            nombreProducto: `${producto.marca} ${producto.modelo}`, // Nombre del celular vendido
-            cantidadVendida,
-            precioVenta,
-            cliente,
-            fechaVenta: new Date(),
-        });
-
-        // Guardar la venta en el historial
-        await nuevaVenta.save();
-
-        // Reducir el stock del producto
+        //Reducir stock
         producto.catidadEnInventario -= cantidadVendida;
+        await producto.save(); 
 
-        // Guardar los cambios en el producto
-        await producto.save();
 
-        res.status(201).json({ message: 'Venta procesada correctamente', venta: nuevaVenta });
     } catch (error) {
-        console.error('Error al procesar la venta:', error);
-        res.status(500).json({ message: 'Error al procesar la venta' });
+        console.log(error );
+        
     }
 };
 
 
-const mostrarRegistroVentas = (req, res)  => {
+const mostrarRegistroVentas = async (req, res)  => {
 
+    const mostrarVentas = await HistorialVentas.find(); 
+    res.json({ mostrarVentas })
+    console.log(mostrarVentas);
+    
 }
 
 export { agregarVenta, mostrarRegistroVentas }

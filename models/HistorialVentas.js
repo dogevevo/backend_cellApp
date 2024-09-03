@@ -4,7 +4,19 @@ const HistorialVentasSchema = mongoose.Schema ({
     nombreCliente : {
         type : String, 
         require : true
-    }, 
+    },
+    modeloVendido : {
+        type : String, 
+        require : true
+    },
+    marca:{
+        type : String,
+        require: true,
+    },
+    numeroDeSerie:{
+        type : String,
+        require: true,
+    },
     fechaVenta : {
         type : Date, 
         default : Date.now(),

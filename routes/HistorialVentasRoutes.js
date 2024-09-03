@@ -1,17 +1,14 @@
 import express from 'express';
 import checkAuth from '../middleware/authMiddleware.js';
 import checkProducto from '../middleware/productoMiddleware.js';
+import { agregarVenta, mostrarRegistroVentas } from '../controllers/HistorialVentasController.js';
 const router = express.Router();
 
 
 //router.route('/').post(agregarVenta).get(mostrarRegistroVentas);
 
-router.post('/ruta-protegida',checkAuth,checkProducto,  (req, res) => {
+router.post('/ruta-protegida',checkAuth,checkProducto,  agregarVenta);
+router.get('/ruta-protegida',checkAuth,  mostrarRegistroVentas);
 
-    const producto = req.producto;
-    
-    
-    res.json({ msg: 'Acceso a producto', producto });
-  });
 
 export default router; 

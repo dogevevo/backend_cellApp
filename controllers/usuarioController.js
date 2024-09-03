@@ -1,9 +1,10 @@
 import Usuario from "../models/usuario.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarToken from "../helpers/generarToken.js";
+import emailRegistro from "../helpers/emailRegistro.js";
 
 const registrar = async (req, res) => {
-    const { email } = req.body; 
+    const { email, nombre } = req.body; 
 
     const existeUsuario = await Usuario.findOne({email}); 
 
@@ -16,7 +17,8 @@ const registrar = async (req, res) => {
         
         const usuario = new Usuario(req.body); 
         const usuarioGuardado = await usuario.save(); 
-
+        //mandar email 
+        emailRegistro({email, nombre, token : usuarioGuardado.token})
         res.json({ usuarioGuardado })
         
 
