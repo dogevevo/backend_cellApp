@@ -2,6 +2,7 @@ import Usuario from "../models/usuario.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarToken from "../helpers/generarToken.js";
 import emailRegistro from "../helpers/emailRegistro.js";
+import EmailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 const registrar = async (req, res) => {
     const { email, nombre } = req.body; 
@@ -50,6 +51,8 @@ const confirmar = async (req, res) => {
         await usuarioConfirmar.save();
         
         res.json({ msg : "Usuario confirmado Correctamente" })
+        console.log('Roger Parrales');
+        
 
     } catch (error) {
         console.log(error);
@@ -99,6 +102,13 @@ const nuevoPassword = async(req, res) => {
         
         usuario.token = generarToken(); 
         await usuario.save(); 
+
+        //enviar email 
+        EmailOlvidePassword({
+            email, 
+            nombre : usuario.nombre,
+            token : usuario.token, 
+        })
 
         console.log('el token se guardo');
         res.json({ msg : 'se madaron instrucciones y un token a tu correo' })

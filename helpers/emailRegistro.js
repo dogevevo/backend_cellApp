@@ -22,7 +22,7 @@ const emailRegistro = async( datos ) => {
       text: 'Comprueba tu cuenta de Phone Cells',
       html: `
         <p> Hola ${nombre}, Comprueba tu cuenta </p>
-                <p> Tu cuenta ya esta lista, solo debes comprobarla en el siguiente enlace: <a href="${process.env.FRONT_URL}/confirmarCuenta/${token}"> Comprobar Cuenta </a></p>        <p> Si no creastes esta cuenta puedes ignorar el mensaje </p>
+                <p> Tu cuenta ya esta lista, solo debes comprobarla en el siguiente enlace: <a href="${process.env.FRONT_URL}/confirmar/${token}"> Comprobar Cuenta </a></p>        <p> Si no creastes esta cuenta puedes ignorar el mensaje </p>
       
       `
     })
