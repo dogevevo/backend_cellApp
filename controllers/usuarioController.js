@@ -51,7 +51,7 @@ const confirmar = async (req, res) => {
         await usuarioConfirmar.save();
         
         res.json({ msg : "Usuario confirmado Correctamente" })
-        console.log('Roger Parrales');
+       
         
 
     } catch (error) {
@@ -62,6 +62,7 @@ const confirmar = async (req, res) => {
 
 const autenticar = async(req, res) => {
 
+    
     const {email, password} = req.body; 
     const auntenticarUsuario = await Usuario.findOne({email});
     
@@ -128,6 +129,8 @@ const comprobarToken = async(req, res) => {
     if (!usuarioTok) {
         const error = new Error('el token no es valido')
         return res.status(400).json({ msg : error.message })
+    }else{
+        res.json({ msg: "Token válido y el usuario existe" });
     }
     
     console.log('el token es el mismo');
@@ -139,19 +142,22 @@ const generarNewPassword = async (req, res) => {
     const {token} = req.params;
     const {password} = req.body;
 
-    const usuarioTok = await Usuario.findOne({ token })
+    const usuarioNewPass = await Usuario.findOne({token})
 
-    if (!usuarioTok) {
+    if (!usuarioNewPass) {
         const error = new Error('Hubo un error'); 
         return res.status(400).json({ msg : error.message })
     }
 
     try {
         
-        usuarioTok.token = null
-        usuarioTok.password = password; 
-        await usuarioTok.save()
-        res.json({ msg : 'el password fue cambiado correctamente...' })
+        usuarioNewPass.token = null; 
+        usuarioNewPass.password = password;
+        await usuarioNewPass.save();
+        
+        res.json({ msg : "Usuario confirmado Correctamente" })
+        console.log('Roger Parrales');
+        
 
     } catch (error) {
         console.log(error);

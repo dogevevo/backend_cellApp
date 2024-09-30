@@ -12,20 +12,24 @@ app.use(express.json());
 dotenv.config();
 connectarDB()
 
-const dominiosPermitidos = [process.env.FRONT_URL]; 
-const corsOptions = {
-    origin: function(origin, callback){
-        if (dominiosPermitidos.indexOf(origin) !== -1) {
-            callback(null, true)
-        }else{
-            callback(new Error('No permitodo por CORS')) 
-        }
-    }
-}
 
-app.use(cors(corsOptions))
+//Comente esta parte del cors para poder usar postman 
+// const dominiosPermitidos = [process.env.FRONT_URL]; 
+// const corsOptions = {
+//     origin: function(origin, callback){
+//         if (dominiosPermitidos.indexOf(origin) !== -1) {
+//             callback(null, true)
+//         }else{
+//             callback(new Error('No permitodo por CORS')) 
+//         }
+//     }
+// }
 
-app.use('/api/usuarios/',UsuarioRoutes)
+// app.use(cors(corsOptions))
+
+
+// esta parte tiene una pleca de mas 
+app.use('/api/usuarios',UsuarioRoutes)
 app.use('/api/cellPhone/', CellPhoneRoutes)
 app.use('/api/historialVentas/', HistorialVentasRoutes)
 
